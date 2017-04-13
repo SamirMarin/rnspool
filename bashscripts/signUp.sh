@@ -1,1 +1,1 @@
-curl -i -X POST -H "Content-Type: application/json"  -d '{"email":"marin.sam@gmail.com","password":"123abc"}' http://127.0.0.1:8080/signup/driver
+curl -i -X POST -H "Content-Type: application/json"  -d '{"email":"marin.sramij@gmail.com","password":"1234abc","aptNum":1234,"postalCode":"c8g8yh","city":"Vancouver"}' http://127.0.0.1:8080/signup/driver

@@ -7,20 +7,28 @@ import (
 type User struct {
 	Id        int       `json:"id"`
 	Uuid      string    `json:"uuid"`
-	Email     string    `json: "email"`
-	Password  string    `josn: "password"`
-	FirstName string    `json: "firstname"`
-	LastName  string    `json: "lastname"`
-	AboutMe   string    `json: "aboutme"`
-	AptNum    int       `json: "aptnum"`
-	HouseNum  int       `json: "housenum"`
-	Street    string    `json: "street"`
-	CreatedAt time.Time `json: "createdat"`
+	Email     string    `json:"email"`
+	Password  string    `josn:"password"`
+	FirstName string    `json:"firstName"`
+	LastName  string    `json:"lastName"`
+	AboutMe   string    `json:"aboutMe"`
+	AptNum    int       `json:"aptNum"`
+	HouseNum  int       `json:"houseNum"`
+	Street    string    `json:"street"`
+	PostalCode string `json:"postalCode"`
+	City string `json:"city"`
+	Province string `json:"province"`
+	Country string `json:"country"`
+	CreatedAt time.Time `json:"createdat"`
+	AddressId int `json:"addressId"`
 }
 type Session struct {
 	Id        int
 	Uuid      string
 	Email     string
+	FirstName string
+	LastName string
+	AboutMe string
 	UserId    int
 	CreatedAt time.Time
 }
@@ -33,14 +41,23 @@ type Driver struct {
 	DriverRating float64
 }
 
+type Address struct {
+	Id int
+	AptNum int
+	HouseNum int
+	Street string
+	PostalCode string
+	LocationId int
+}
+
 /**
 User creates an account
 */
 func (user *User) Create() (err error) {
 	statement := "INSERT INTO user_table ( uuid, email, password, firstName, lastName, " +
-		"aboutMe, aptNum, houseNum, street, createdAt )" +
-		"VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)" +
-		"RETURNING id, uuid, createdAt"
+		"aboutMe, createdAt, addressId )" +
+		"VALUES ($1, $2, $3, $4, $5, $6, $7, $8)" +
+		"RETURNING id, uuid, email, firstName, lastName, aboutMe, createdAt, addressId"
 
 	insertStmt, err := Db.Prepare(statement)
 	if err != nil {
@@ -49,9 +66,9 @@ func (user *User) Create() (err error) {
 	defer insertStmt.Close()
 
 	err = insertStmt.QueryRow(createUUID(), user.Email, Encrypt(user.Password),
-		user.FirstName, user.LastName, user.AboutMe,
-		user.AptNum, user.HouseNum, user.Street, time.Now()).
-		Scan(&user.Id, &user.Uuid, &user.CreatedAt)
+		user.FirstName, user.LastName, user.AboutMe, time.Now(), user.AddressId).
+		Scan(&user.Id, &user.Uuid, &user.Email, &user.FirstName, &user.LastName,
+		&user.AboutMe,  &user.CreatedAt, &user.AddressId)
 	return
 }
 func (driver *Driver) Create() (err error) {
@@ -81,26 +98,47 @@ func (rider *Rider) Create() (err error) {
 	return
 }
 
-/**
-User login, creates a session for the user
-*/
-func (user *User) CreateSession() (session Session, err error) {
-	statement := "INSERT INTO session_table (uuid, email, userId, createAt)" +
-		"VALUES ($1, $2, $3, $4)" +
-		"RETURNING id, uuid, email, userId, createAt"
+func (address *Address) Create() (err error)  {
+	statement := `INSERT INTO address (aptNum, houseNum, street, postalCode, locationId)
+	VALUES($1, $2, $3, $4, $5)
+	RETURNING id, aptNum, houseNum, street, postalCode, locationId`
+
 	insertStmt, err := Db.Prepare(statement)
 	if err != nil {
 		return
 	}
 	defer insertStmt.Close()
 
-	err = insertStmt.QueryRow(createUUID(), user.Email, user.Id, time.Now()).
-		Scan(&session.Id, &session.Uuid, &session.Email, &session.UserId, &session.CreatedAt)
+	err = insertStmt.QueryRow(address.AptNum, address.HouseNum, address.Street,
+		address.PostalCode, address.LocationId).
+		Scan(&address.Id, &address.AptNum, &address.HouseNum, &address.Street,
+		&address.PostalCode, &address.LocationId)
 	return
 }
 
 /**
-check in user session is still active
+User login, creates a session for the user
+*/
+func (user *User) CreateSession() (session Session, err error) {
+	statement := "INSERT INTO session_table (uuid, email, firstName, lastName," +
+		"aboutMe, userId, createdAt)" +
+		"VALUES ($1, $2, $3, $4, $5, $6, $7)" +
+		"RETURNING id, uuid, email, firstName, lastName, aboutMe, userId, createdAt"
+	insertStmt, err := Db.Prepare(statement)
+	if err != nil {
+		return
+	}
+	defer insertStmt.Close()
+
+	err = insertStmt.QueryRow(createUUID(), user.Email, user.FirstName, user.LastName,
+		user.AboutMe, user.Id, time.Now()).
+		Scan(&session.Id, &session.Uuid, &session.Email, &session.FirstName, &session.LastName,
+		&session.AboutMe, &session.UserId, &session.CreatedAt)
+	return
+}
+
+/**
+check if user session is still active
 */
 func (session *Session) Check() (valid bool, err error) {
 	err = Db.QueryRow(
@@ -120,10 +158,10 @@ func (session *Session) Check() (valid bool, err error) {
 }
 func UserByEmail(email string) (user User, err error) {
 	err = Db.QueryRow(
-		`SELECT id, uuid, email, firstName, lastName, aboutMe
+		`SELECT id, uuid, email, password, firstName, lastName, aboutMe
 	FROM user_table
 	WHERE email = $1`,
 		email).
-		Scan(&user.Id, user.Uuid, user.Email, user.FirstName, user.LastName, user.AboutMe)
+		Scan(&user.Id, &user.Uuid, &user.Email, &user.Password, &user.FirstName, &user.LastName, &user.AboutMe)
 	return
 }

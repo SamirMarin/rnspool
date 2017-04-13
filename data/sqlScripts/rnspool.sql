@@ -1,10 +1,29 @@
 
 DROP TABLE IF EXISTS rideOffered, rideNeeded;
 DROP TABLE IF EXISTS ride;
-DROP TABLE IF EXISTS location, car, route;
+DROP TABLE IF EXISTS  vehicle, route;
 DROP TABLE IF EXISTS rider, driver, session_table;
 DROP TABLE IF EXISTS user_table;
+DROP TABLE IF EXISTS address;
+DROP TABLE IF EXISTS location;
 
+
+
+CREATE TABLE location (
+  id SERIAL PRIMARY KEY,
+  city VARCHAR(100),
+  province VARCHAR(100),
+  country VARCHAR(100)
+);
+
+CREATE TABLE address (
+  id SERIAL PRIMARY KEY ,
+  aptNum INTEGER,
+  houseNum INTEGER,
+  street VARCHAR(100),
+  postalCode VARCHAR(10),
+  locationId INTEGER NOT NULL REFERENCES location (id)
+);
 
 CREATE TABLE user_table (
   id SERIAL PRIMARY KEY,
@@ -14,18 +33,8 @@ CREATE TABLE user_table (
   firstName VARCHAR(255), -- arbitrary limit??
   lastName VARCHAR(255),
   aboutMe VARCHAR(300),
-  aptNum INTEGER,
-  houseNum INTEGER,
-  street VARCHAR(100),
-  createdAt TIMESTAMP NOT NULL
-);
-
-CREATE TABLE location (
-  id SERIAL PRIMARY KEY,
-  city VARCHAR(100),
-  province VARCHAR(100),
-  country VARCHAR(100),
-  userId INTEGER REFERENCES user_table (id)
+  createdAt TIMESTAMP NOT NULL,
+  addressId INTEGER NOT NULL REFERENCES address (id)
 );
 
 CREATE TABLE session_table (
@@ -50,10 +59,10 @@ CREATE TABLE driver (
   driverRating REAl CHECK (driverRating >= 0 AND driverRating <= 5)
 );
 
-CREATE TABLE car (
+CREATE TABLE vehicle (
   id SERIAL PRIMARY KEY,
   licence VARCHAR(20),
-  brand VARCHAR(50),
+  make VARCHAR(50),
   model VARCHAR(50),
   year INTEGER,
   numPassengers INTEGER,
@@ -80,7 +89,7 @@ CREATE TABLE ride (
 CREATE TABLE rideOffered(
   rideId INTEGER PRIMARY KEY REFERENCES ride (id),
   availableSeats INTEGER,
-  carId INTEGER NOT NULL REFERENCES car (id)
+  vehicleId INTEGER NOT NULL REFERENCES vehicle (id)
 );
 
 CREATE TABLE rideNeeded(
