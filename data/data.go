@@ -4,8 +4,8 @@ import (
 	"crypto/rand"
 	"crypto/sha1"
 	"database/sql"
-	_ "github.com/lib/pq"
 	"fmt"
+	_ "github.com/lib/pq"
 	"log"
 )
 

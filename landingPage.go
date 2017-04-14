@@ -6,10 +6,8 @@ func handleLandingPage(w http.ResponseWriter, r *http.Request) {
 	var err error
 	switch r.Method {
 
-	case "GET":
-		err = handleLandingGet(w, r)
-	case "POST":
-		err = handleLandingPost(w, r)
+	default:
+		err = handleLandingDefault(w, r)
 	}
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -18,10 +16,8 @@ func handleLandingPage(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func handleLandingGet(w http.ResponseWriter, r *http.Request) (err error) {
-	return
+func handleLandingDefault(w http.ResponseWriter, r *http.Request) (err error) {
+	http.NotFound(w, r)
+	return err
 
-}
-func handleLandingPost(w http.ResponseWriter, r *http.Request) (err error) {
-	return
 }

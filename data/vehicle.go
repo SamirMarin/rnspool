@@ -1,15 +1,15 @@
 package data
 
 type Vehicle struct {
-	Id int `json:"id"`
-	Licence string `json:"licence"`
-	Make string `json:"make"`
-	Model string `json: "model"`
-	Year int `json: "year"`
-	NumberPassengers int `json: "numPassengers"`
-	Type string `json: "type"`
-	DriverId int `json: "driverId"`
-	Uuid string `json: "uuid"`
+	Id               int    `json:"id"`
+	Licence          string `json:"licence"`
+	Make             string `json:"make"`
+	Model            string `json: "model"`
+	Year             int    `json: "year"`
+	NumberPassengers int    `json: "numPassengers"`
+	Type             string `json: "type"`
+	DriverId         int    `json: "driverId"`
+	Uuid             string `json: "uuid"`
 }
 
 func (vehicle *Vehicle) Create() (err error) {
@@ -27,8 +27,7 @@ func (vehicle *Vehicle) Create() (err error) {
 	err = insertStmt.QueryRow(vehicle.Licence, vehicle.Make, vehicle.Model, vehicle.Year,
 		vehicle.NumberPassengers, vehicle.Type, vehicle.DriverId).
 		Scan(&vehicle.Id, &vehicle.Licence, &vehicle.Make, &vehicle.Model, &vehicle.Year,
-		&vehicle.NumberPassengers, &vehicle.Type, &vehicle.DriverId)
+			&vehicle.NumberPassengers, &vehicle.Type, &vehicle.DriverId)
 	return
 
 }
-

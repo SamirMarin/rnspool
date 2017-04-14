@@ -13,7 +13,8 @@ CREATE TABLE location (
   id SERIAL PRIMARY KEY,
   city VARCHAR(100),
   province VARCHAR(100),
-  country VARCHAR(100)
+  country VARCHAR(100),
+  UNIQUE (city, province, country)
 );
 
 CREATE TABLE address (
@@ -22,7 +23,8 @@ CREATE TABLE address (
   houseNum INTEGER,
   street VARCHAR(100),
   postalCode VARCHAR(10),
-  locationId INTEGER NOT NULL REFERENCES location (id)
+  locationId INTEGER NOT NULL REFERENCES location (id),
+  UNIQUE (aptNum, houseNum, street, postalCode)
 );
 
 CREATE TABLE user_table (

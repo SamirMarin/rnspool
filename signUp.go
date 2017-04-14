@@ -2,9 +2,9 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/SamirMarin/rnspool/backend_webservice/data"
 	"net/http"
-	"fmt"
 )
 
 func handleSignUp(w http.ResponseWriter, r *http.Request) {

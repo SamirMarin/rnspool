@@ -1,9 +1,9 @@
 package main
 
 import (
-	"net/http"
-	"github.com/SamirMarin/rnspool/backend_webservice/data"
 	"encoding/json"
+	"github.com/SamirMarin/rnspool/backend_webservice/data"
+	"net/http"
 )
 
 func handleVehicle(w http.ResponseWriter, r *http.Request) {
@@ -29,11 +29,11 @@ func handleVehiclePost(w http.ResponseWriter, r *http.Request) (err error) {
 	json.Unmarshal(body, vehicle)
 	session := data.Session{Uuid: vehicle.Uuid}
 	var isValidSess bool
-	isValidSess,err = session.Check()
+	isValidSess, err = session.Check()
 	if err != nil {
 		return
 	}
-	if isValidSess{
+	if isValidSess {
 		err = vehicle.Create()
 		if err != nil {
 			return
