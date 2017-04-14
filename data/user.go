@@ -2,6 +2,7 @@ package data
 
 import (
 	"time"
+	"database/sql"
 )
 
 type User struct {
@@ -99,20 +100,30 @@ func (rider *Rider) Create() (err error) {
 }
 
 func (address *Address) Create() (err error) {
-	statement := `INSERT INTO address (aptNum, houseNum, street, postalCode, locationId)
-	VALUES($1, $2, $3, $4, $5)
-	RETURNING id, aptNum, houseNum, street, postalCode, locationId`
+	err = Db.QueryRow(`SELECT id
+	FROM address
+	WHERE aptNum = $1 AND houseNume = $2 AND street = $3 AND postalCode = $4`,
+	address.AptNum, address.HouseNum, address.Street, address.PostalCode).
+		Scan(&address.Id)
 
-	insertStmt, err := Db.Prepare(statement)
-	if err != nil {
+	if address.Id == 0 {
+		statement := `INSERT INTO address (aptNum, houseNum, street, postalCode, locationId)
+		VALUES($1, $2, $3, $4, $5)
+		RETURNING id, aptNum, houseNum, street, postalCode, locationId`
+
+		var insertStmt *sql.Stmt
+		insertStmt, err = Db.Prepare(statement)
+		if err != nil {
+			return
+		}
+		defer insertStmt.Close()
+
+		err = insertStmt.QueryRow(address.AptNum, address.HouseNum, address.Street,
+			address.PostalCode, address.LocationId).
+			Scan(&address.Id, &address.AptNum, &address.HouseNum, &address.Street,
+			&address.PostalCode, &address.LocationId)
 		return
 	}
-	defer insertStmt.Close()
-
-	err = insertStmt.QueryRow(address.AptNum, address.HouseNum, address.Street,
-		address.PostalCode, address.LocationId).
-		Scan(&address.Id, &address.AptNum, &address.HouseNum, &address.Street,
-			&address.PostalCode, &address.LocationId)
 	return
 }
 
