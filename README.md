@@ -1,5 +1,5 @@
 # rnspool
-car pool back-end web service
+car pool back-end web service in Golang with Postgresql database
 
 This is a project I'm taking on because one I think its a cool Idea and would love to see it come alive in the future and two
 I really enjoy programing a golang and want put a challange forward to help me better understand the language and all its power.
