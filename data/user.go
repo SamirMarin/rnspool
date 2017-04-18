@@ -153,10 +153,10 @@ check if user session is still active
 */
 func (session *Session) Check() (valid bool, err error) {
 	err = Db.QueryRow(
-		`SELECT id, uuid, email, creatAt
+		`SELECT id, uuid, email, userId, createdAt
 	FROM session_table
-	WHERE uuid = $1`,
-		session.Uuid).
+	WHERE uuid = $1 AND userId = $2`,
+		session.Uuid, session.UserId).
 		Scan(&session.Id, &session.Uuid, &session.Email, &session.UserId, &session.CreatedAt)
 	if err != nil {
 		valid = false

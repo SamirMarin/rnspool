@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/SamirMarin/rnspool/backend_webservice/data"
 	"net/http"
+	"fmt"
 )
 
 func handleVehicle(w http.ResponseWriter, r *http.Request) {
@@ -26,10 +27,14 @@ func handleVehiclePost(w http.ResponseWriter, r *http.Request) (err error) {
 	body := make([]byte, len)
 	r.Body.Read(body)
 	var vehicle data.Vehicle
-	json.Unmarshal(body, vehicle)
-	session := data.Session{Uuid: vehicle.Uuid}
+	json.Unmarshal(body, &vehicle)
+	fmt.Println("what", vehicle.DriverId, vehicle.Uuid)
+	var session data.Session
+	session = data.Session{Uuid: vehicle.Uuid, UserId: vehicle.DriverId}
 	var isValidSess bool
+	fmt.Println("its a ssess", session)
 	isValidSess, err = session.Check()
+	fmt.Println("there boool come one now:", isValidSess)
 	if err != nil {
 		return
 	}

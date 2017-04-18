@@ -1,0 +1,10 @@
+{
+  "licence": "vhi 999",
+  "make": "Honda",
+  "model": "civic",
+  "year": 1994,
+  "numPassengers": 4,
+  "type": "personal",
+  "driverId": 2,
+  "uuid": "91b1319d-7675-4eb6-60a2-43b756f29559"
+}

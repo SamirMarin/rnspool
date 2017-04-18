@@ -1,39 +1,23 @@
 package main
 
+
 import (
-	"bytes"
+	"net/http"
+	"net/http/httptest"
+	"testing"
 	"encoding/json"
 	"fmt"
 	"github.com/SamirMarin/rnspool/backend_webservice/data"
-	"io/ioutil"
-	"net/http"
-	"net/http/httptest"
-	"os"
-	"testing"
 )
 
-func makeJsonReader(path string) (reader *bytes.Reader, err error) {
-	jsonFile, err := os.Open(path)
-	if err != nil {
-		return
-	}
-	defer jsonFile.Close()
-	jsonData, err := ioutil.ReadAll(jsonFile)
-	if err != nil {
-		return
-	}
-	reader = bytes.NewReader(jsonData)
-	return
-}
-
-func TestHandleSignUpPostDriver(t *testing.T) {
+func TestHandleLoginPostDriver(t *testing.T) {
 	writer = httptest.NewRecorder()
 	reader, err := makeJsonReader("testJsonData/drivers/driver1.json")
 	if err != nil {
 		t.Fatal("error making json reader")
 
 	}
-	request, err := http.NewRequest("POST", "/signup/driver", reader)
+	request, err := http.NewRequest("POST", "/login", reader)
 	if err != nil {
 		t.Fatal("Error forming the request")
 	}
@@ -48,14 +32,16 @@ func TestHandleSignUpPostDriver(t *testing.T) {
 		t.Errorf("Cannot retrive JSON user")
 	}
 	fmt.Println(session)
+
 }
-func TestHandleSignUpPostRider(t *testing.T) {
+func TestHandleLoginPostRider(t *testing.T) {
 	writer = httptest.NewRecorder()
-	jsonReader, err := makeJsonReader("testJsonData/riders/rider1.json")
+	reader, err := makeJsonReader("testJsonData/riders/rider1.json")
 	if err != nil {
-		t.Fatal("error making the json reader")
+		t.Fatal("error making json reader")
+
 	}
-	request, err := http.NewRequest("POST", "/signup/rider", jsonReader)
+	request, err := http.NewRequest("POST", "/login", reader)
 	if err != nil {
 		t.Fatal("Error forming the request")
 	}
@@ -70,4 +56,5 @@ func TestHandleSignUpPostRider(t *testing.T) {
 		t.Errorf("Cannot retrive JSON user")
 	}
 	fmt.Println(session)
+
 }
