@@ -1,7 +1,9 @@
 
 DROP TABLE IF EXISTS rideOffered, rideNeeded;
+DROP TABLE IF EXISTS leg;
+DROP TABLE IF EXISTS route;
 DROP TABLE IF EXISTS ride;
-DROP TABLE IF EXISTS  vehicle, route;
+DROP TABLE IF EXISTS  vehicle;
 DROP TABLE IF EXISTS rider, driver, session_table;
 DROP TABLE IF EXISTS user_table;
 DROP TABLE IF EXISTS address;
@@ -72,30 +74,53 @@ CREATE TABLE vehicle (
   driverId INTEGER REFERENCES driver (userId)
 );
 
-CREATE TABLE route (
-  id SERIAL PRIMARY KEY,
-  startPoint POINT,
-  endPoint POINT,
-  pickUpDesc VARCHAR(75),
-  dropOffDesc VARCHAR(75)
-);
 
 CREATE TABLE ride (
-  id SERIAL PRIMARY KEY,
-  date DATE,
-  description VARCHAR(150),
+  startDescrip VARCHAR(100), -- address or latlon all in one as per the google api
+  endDescrip VARCHAR(100),
+  createdAt TIMESTAMP,
   locId INTEGER NOT NULL REFERENCES location (id),
-  routeId INTEGER NOT NULL REFERENCES route (id)
+  PRIMARY KEY (startDescrip, endDescrip)
 );
 
 CREATE TABLE rideOffered(
-  rideId INTEGER PRIMARY KEY REFERENCES ride (id),
+  startDescrip VARCHAR(100),
+  endDescrip VARCHAR(100),
   availableSeats INTEGER,
-  vehicleId INTEGER NOT NULL REFERENCES vehicle (id)
+  timeLeaving TIMESTAMP,
+  vehicleId INTEGER NOT NULL REFERENCES vehicle (id),
+  PRIMARY KEY (startDescrip, endDescrip),
+  FOREIGN KEY (startDescrip, endDescrip) REFERENCES ride(startDescrip, endDescrip)
+
 );
 
 CREATE TABLE rideNeeded(
-  rideId INTEGER PRIMARY KEY REFERENCES ride (id),
+  startDescrip VARCHAR(100),
+  endDescrip VARCHAR(100),
   neededSeats INTEGER,
-  riderId INTEGER REFERENCES rider (userId)
+  timePickUp TIMESTAMP,
+  riderId INTEGER REFERENCES rider (userId),
+  PRIMARY KEY (startDescrip, endDescrip),
+  FOREIGN KEY (startDescrip, endDescrip) REFERENCES ride(startDescrip, endDescrip)
 );
+
+CREATE TABLE route (
+  id SERIAL PRIMARY KEY,
+  startDescrip VARCHAR(100),
+  endDescrip VARCHAR(100),
+  description VARCHAR(100),
+  FOREIGN KEY (startDescrip, endDescrip) REFERENCES ride(startDescrip, endDescrip)
+);
+
+CREATE TABLE leg (
+  startPointLat DOUBLE PRECISION,
+  startPointLon DOUBLE PRECISION,
+  endPointLat DOUBLE PRECISION,
+  endPointLon DOUBLE PRECISION,
+  htmlInstr VARCHAR(150),
+  duration BIGINT,
+  distance INTEGER,
+  routeId INTEGER NOT NULL REFERENCES route(id),
+  PRIMARY KEY (startPointLat, startPointLon, endPointLat, endPointLon)
+);
+
