@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"github.com/SamirMarin/rnspool/backend_webservice/data"
 	"encoding/json"
+	"github.com/SamirMarin/rnspool/backend_webservice/controllerLogic"
 )
 
 func handleSetUpRide(w http.ResponseWriter, r *http.Request){
@@ -59,6 +60,27 @@ func handleSetUpRidePost(w http.ResponseWriter, r *http.Request) (err error) {
 			}
 		}
 		//we need to make API call to save routes and legs..
+		var routes []data.Route
+		routes, err = controllerLogic.ObtainRoutes(ride.StartDescrip, ride.EndDescrip)
+		if err != nil {
+			return
+		}
+		for _, route := range routes {
+			err = route.Create()
+			if err != nil {
+				return
+			}
+			err = data.CreateRideHasRouteByIds(ride.Id, route.Id)
+			if err != nil {
+				return
+			}
+			for _, leg := range route.Legs {
+				err = leg.Create(route.Id)
+				if err != nil {
+					return
+				}
+			}
+		}
 	}
 	return
 }

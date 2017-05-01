@@ -76,32 +76,30 @@ CREATE TABLE vehicle (
 
 
 CREATE TABLE ride (
+  id SERIAL PRIMARY KEY,
   startDescrip VARCHAR(100), -- address or latlon all in one as per the google api
   endDescrip VARCHAR(100),
   createdAt TIMESTAMP,
-  locId INTEGER NOT NULL REFERENCES location (id),
-  PRIMARY KEY (startDescrip, endDescrip)
+  locId INTEGER NOT NULL REFERENCES location (id)
 );
 
 CREATE TABLE rideOffered(
-  startDescrip VARCHAR(100),
-  endDescrip VARCHAR(100),
+  rideId INTEGER,
   availableSeats INTEGER,
   timeLeaving TIMESTAMP,
   vehicleId INTEGER NOT NULL REFERENCES vehicle (id),
-  PRIMARY KEY (startDescrip, endDescrip),
-  FOREIGN KEY (startDescrip, endDescrip) REFERENCES ride(startDescrip, endDescrip)
+  PRIMARY KEY (rideId),
+  FOREIGN KEY (rideId) REFERENCES ride(id)
 
 );
 
 CREATE TABLE rideNeeded(
-  startDescrip VARCHAR(100),
-  endDescrip VARCHAR(100),
+  rideId INTEGER,
   neededSeats INTEGER,
   timePickUp TIMESTAMP,
   riderId INTEGER REFERENCES rider (userId),
-  PRIMARY KEY (startDescrip, endDescrip),
-  FOREIGN KEY (startDescrip, endDescrip) REFERENCES ride(startDescrip, endDescrip)
+  PRIMARY KEY (rideId),
+  FOREIGN KEY (rideId) REFERENCES ride(id)
 );
 
 CREATE TABLE route (
@@ -109,7 +107,15 @@ CREATE TABLE route (
   startDescrip VARCHAR(100),
   endDescrip VARCHAR(100),
   description VARCHAR(100),
-  FOREIGN KEY (startDescrip, endDescrip) REFERENCES ride(startDescrip, endDescrip)
+  UNIQUE (startDescrip, endDescrip, description)
+);
+
+CREATE TABLE rideHasRoute (
+  rideId INTEGER,
+  routeId INTEGER,
+  PRIMARY KEY (rideId, routeId),
+  FOREIGN KEY (rideId) REFERENCES ride(id),
+  FOREIGN KEY (routeId) REFERENCES route(id)
 );
 
 CREATE TABLE leg (

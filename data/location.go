@@ -16,6 +16,9 @@ func (location *Location) Create() (err error) {
 	WHERE city = $1 AND province = $2 AND country = $3`,
 		location.City, location.Province, location.Country).
 		Scan(&location.Id)
+	if err != nil {
+		return
+	}
 
 	if location.Id == 0 {
 		statement := `INSERT INTO location(city, province, country)

@@ -25,7 +25,7 @@ type Ride struct {
 func (ride *Ride) Create(locationId int) (err error ) {
 	statement := `INSERT INTO ride ( startDescrip, endDescrip, createdAt, locId )
 	 VALUES ($1, $2, $3, $4)
-	 RETURNING startDescrip, endDescrip, createdAt, locId`
+	 RETURNING id, startDescrip, endDescrip, createdAt, locId`
 
 	insertStmt, err := Db.Prepare(statement)
 	if err != nil {
@@ -34,15 +34,15 @@ func (ride *Ride) Create(locationId int) (err error ) {
 	defer insertStmt.Close()
 
 	err = insertStmt.QueryRow(ride.StartDescrip, ride.EndDescrip, time.Now, locationId).
-		Scan(&ride.StartDescrip, &ride.EndDescrip, &ride.CreatedAt, &ride.LocId)
+		Scan(&ride.Id, &ride.StartDescrip, &ride.EndDescrip, &ride.CreatedAt, &ride.LocId)
 
 	return
 
 }
 
 func (ride *Ride) CreateRideOffered(vehicleId int) (err error) {
-	statement := `INSERT INTO rideOffered (startDescrip, endDescrip, availableSeats, timeLeaving, vehicleId )
-		VALUES($1, $2, $3, $4, $5)
+	statement := `INSERT INTO rideOffered (rideId, startDescrip, endDescrip, availableSeats, timeLeaving, vehicleId )
+		VALUES($1, $2, $3, $4, $5, $6)
 		RETURNING startDescrip, endDescrip, availableSeats, timeLeaving`
 
 	insertStmt, err := Db.Prepare(statement)
@@ -51,15 +51,15 @@ func (ride *Ride) CreateRideOffered(vehicleId int) (err error) {
 	}
 	defer insertStmt.Close()
 
-	err = insertStmt.QueryRow(ride.StartDescrip, ride.EndDescrip, ride.AvailableSeats, ride.TimeLeaving).
+	err = insertStmt.QueryRow(ride.Id, ride.StartDescrip, ride.EndDescrip, ride.AvailableSeats, ride.TimeLeaving).
 		Scan(&ride.StartDescrip, &ride.EndDescrip, &ride.AvailableSeats, &ride.TimeLeaving)
 
 	return
 }
 
 func (ride *Ride) CreateRideNeeded() (err error) {
-	statement := `INSERT INTO rideNeeded (startDescrip, endDescrip, neededSeats, timePickUp, rideId)
-		VALUES($1, $2, $3, $4, $5)
+	statement := `INSERT INTO rideNeeded (rideId, startDescrip, endDescrip, neededSeats, timePickUp, rideId)
+		VALUES($1, $2, $3, $4, $5, $6)
 		RETURNING startDescrip, endDescrip, neededSeats, timePickUP, rideId`
 
 	insertStmt, err := Db.Prepare(statement)
@@ -68,7 +68,7 @@ func (ride *Ride) CreateRideNeeded() (err error) {
 	}
 	defer insertStmt.Close()
 
-	err = insertStmt.QueryRow(ride.StartDescrip, ride.EndDescrip, ride.NeededSeats, ride.TimePickUp, ride.UserId).
+	err = insertStmt.QueryRow(ride.Id, ride.StartDescrip, ride.EndDescrip, ride.NeededSeats, ride.TimePickUp, ride.UserId).
 		Scan(&ride.StartDescrip, &ride.EndDescrip, &ride.NeededSeats, &ride.TimePickUp, &ride.UserId)
 
 	return
