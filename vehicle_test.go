@@ -4,9 +4,9 @@ import (
 	"testing"
 	"net/http/httptest"
 	"net/http"
-	"github.com/SamirMarin/rnspool/backend_webservice/data"
 	"encoding/json"
 	"fmt"
+	"github.com/SamirMarin/rnspool/data"
 )
 
 func TestHandleVehicleLoginPost(t *testing.T) {

@@ -7,7 +7,7 @@ import (
 	"testing"
 	"encoding/json"
 	"fmt"
-	"github.com/SamirMarin/rnspool/backend_webservice/data"
+	"github.com/SamirMarin/rnspool/data"
 )
 
 func TestHandleLoginPostDriver(t *testing.T) {

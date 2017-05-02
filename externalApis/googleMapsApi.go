@@ -3,8 +3,8 @@ package googleMapsApi
 import ("googlemaps.github.io/maps"
 	"log"
 	"golang.org/x/net/context"
-	"github.com/SamirMarin/rnspool/backend_webservice/utilfunctions"
 	"encoding/json"
+	"github.com/SamirMarin/rnspool/utilfunctions"
 )
 
 type ApiKey struct {

@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/SamirMarin/rnspool/backend_webservice/data"
+	"github.com/SamirMarin/rnspool/data"
 	"net/http"
 )
 

@@ -2,9 +2,9 @@ package main
 
 import (
 	"net/http"
-	"github.com/SamirMarin/rnspool/backend_webservice/data"
+	"github.com/SamirMarin/rnspool/data"
 	"encoding/json"
-	"github.com/SamirMarin/rnspool/backend_webservice/controllerLogic"
+	"github.com/SamirMarin/rnspool/controllerLogic"
 )
 
 func handleSetUpRide(w http.ResponseWriter, r *http.Request){

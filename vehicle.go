@@ -2,9 +2,9 @@ package main
 
 import (
 	"encoding/json"
-	"github.com/SamirMarin/rnspool/backend_webservice/data"
-	"net/http"
 	"fmt"
+	"github.com/SamirMarin/rnspool/data"
+	"net/http"
 )
 
 func handleVehicle(w http.ResponseWriter, r *http.Request) {
