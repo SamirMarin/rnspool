@@ -9,7 +9,7 @@ import (
 	"github.com/SamirMarin/rnspool/data"
 )
 
-func TestHandleVehicleLoginPost(t *testing.T) {
+func TestHandleVehiclePost(t *testing.T) {
 	writer = httptest.NewRecorder()
 	reader, err := makeJsonReader("testJsonData/vehicles/vehicle1.json")
 

@@ -1,8 +1,8 @@
 package controllerLogic
 
 import (
-	"github.com/SamirMarin/rnspool/backend_webservice/data"
-	"github.com/SamirMarin/rnspool/backend_webservice/externalApis"
+	"github.com/SamirMarin/rnspool/data"
+	"github.com/SamirMarin/rnspool/externalApis"
 	"googlemaps.github.io/maps"
 )
 

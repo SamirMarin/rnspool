@@ -1,8 +1,8 @@
 package data
 
 import (
-	"github.com/pkg/errors"
 	"database/sql"
+	"errors"
 )
 
 type Route struct {
