@@ -24,6 +24,7 @@ func handleSignUp(w http.ResponseWriter, r *http.Request) {
 
 func handleSignUpPost(w http.ResponseWriter, r *http.Request) (err error) {
 	fmt.Println(r.URL.Path)
+	fmt.Println("fun the times")
 	if r.URL.Path != "/signup/driver" && r.URL.Path != "/signup/rider" {
 		http.NotFound(w, r)
 		return

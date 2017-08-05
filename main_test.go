@@ -23,6 +23,7 @@ func setUp() {
 	mux.HandleFunc("/signup/", handleSignUp)
 	mux.HandleFunc("/login", handleLogin)
 	mux.HandleFunc("/vehicle", handleVehicle)
+	mux.HandleFunc("/setupride/", handleSetUpRide)
 }
 
 func tearDown() {

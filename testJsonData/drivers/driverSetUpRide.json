@@ -1,0 +1,16 @@
+{
+  "uuid": "e3b3176b-b596-4f26-6769-b46e19fae25c",
+  "startDescrip": "1351 Continental street, Vancouver, BC",
+  "endDescrip": "UBC",
+  "availableSeats": 4,
+  "neededSeats": 1,
+  "userId": 1,
+  "timeLeaving": "Jul 10, 2017 at 7:54pm (PST)",
+  "timePickUp": "Jul 10, 2017 at 8:54pm (PST)",
+  "carMake": "Honda",
+  "carModel": "civic",
+  "carYear": 1994,
+  "city": "Vancouver",
+  "province": "BC",
+  "country": "Canada"
+}

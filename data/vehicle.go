@@ -35,7 +35,7 @@ func (vehicle *Vehicle) Create() (err error) {
 func VehicleByUserId(userId int, make string, model string, year int) (vehicle Vehicle, err error) {
 	vehicle = Vehicle{Make: make, Model: model, Year: year, DriverId: userId}
 	err = Db.QueryRow(
-		`SELECT id, licence, numPassenger
+		`SELECT id, licence, numPassengers
 		FROM vehicle
 		WHERE make = $1 AND model = $2 AND year = $3 AND driverId = $4`,
 			make, model, year, userId).Scan(&vehicle.Id, &vehicle.Licence, &vehicle.NumberPassengers)

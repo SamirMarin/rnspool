@@ -11,7 +11,7 @@ type ApiKey struct {
 	ApiKey  string `json:"googleMapApiKey"`
 }
 func MakeDirectionsRequest(origin string, destination string) (routes []maps.Route, err error) {
-	reader, err := utilfunctions.MakeJsonData("../private/apiKeys.json")
+	reader, err := utilfunctions.MakeJsonData("private/apiKeys.json")
 	if err != nil {
 		return
 	}

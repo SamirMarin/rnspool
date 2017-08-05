@@ -31,11 +31,11 @@ func (route *Route) Create() (err error) {
 	WHERE startDescrip = $1 AND endDescrip = $2 AND description = $3`,
 		route.StartDescrip, route.EndDescrip, route.Description).
 		Scan(&route.Id)
-	if err != nil {
-		return
-	}
+	//if err != nil {
+	//	return
+	//}
 	if route.Id == 0 {
-		statement := `INSTERT INTO route (startDescrip, endDescrip, description)
+		statement := `INSERT INTO route (startDescrip, endDescrip, description)
 	 	VALUES($1, $2, $3)
 	 	RETURNING id, startDescrip, endDescrip, description`
 
